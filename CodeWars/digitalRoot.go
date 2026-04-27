@@ -1,8 +1,4 @@
-package main
-
-import (
-	"fmt"
-)
+package codewars
 
 func DigitalRoot(n int) int {
 	res := 0
@@ -19,8 +15,4 @@ func DigitalRoot(n int) int {
 		}
 	}
 	return res
-}
-
-func main() {
-	fmt.Println("Hello World!")
 }
