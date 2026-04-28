@@ -1,5 +1,6 @@
 package codewars
 
+// O(log n)
 func DigitalRoot(n int) int {
 	res := 0
 	for res/10 != 0 || res == 0 {
