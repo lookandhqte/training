@@ -2,6 +2,7 @@ package solved
 
 import "fmt"
 
+// I don't like this. It even doesn't work. Need to optimize and think more.
 func groupAnagrams(strs []string) [][]string {
 	result := [][]string{}
 	if len(strs) == 1 {
