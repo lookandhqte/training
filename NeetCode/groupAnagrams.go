@@ -1,6 +1,9 @@
 package solved
 
-import "fmt"
+import (
+	"fmt"
+	"training/usecases"
+)
 
 // I don't like this. It even doesn't work. Need to optimize and think more.
 func groupAnagrams(strs []string) [][]string {
@@ -48,14 +51,9 @@ func groupAnagrams(strs []string) [][]string {
 	return result
 }
 
-type testCase struct {
-	Input  []string
-	Output [][]string
-}
-
 func main() {
 	test := groupAnagrams
-	testCases := []testCase{
+	testCases := []usecases.TestCase{
 		{
 			Input:  []string{"act", "pots", "tops", "cat", "stop", "hat"},
 			Output: [][]string{{"hat"}, {"act", "cat"}, {"pots", "stop", "tops"}},
@@ -76,7 +74,7 @@ func main() {
 	}
 
 	for id, tc := range testCases {
-		res := test(tc.Input)
+		res := test(tc.Input.([]string))
 		fmt.Println("--------------------------")
 		fmt.Println("Test ", id)
 		fmt.Println("Your result: ", res)
