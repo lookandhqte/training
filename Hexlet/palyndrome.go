@@ -6,7 +6,7 @@ import (
 )
 
 // Доделать
-func solution(s string) bool {
+func isPalyndrome(s string) bool {
 	var ans bool
 	lettersMap := make(map[rune]int)
 	for _, r := range s {
@@ -121,7 +121,7 @@ func main() {
 			Output: false,
 		},
 	}
-	test := solution
+	test := isPalyndrome
 	wrongTests := make(map[int]bool) //id result
 	res := false
 	for id, tc := range testCases {

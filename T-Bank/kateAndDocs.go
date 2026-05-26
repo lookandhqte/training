@@ -1,78 +1,67 @@
 package tbank
 
-import "fmt"
+import (
+	"fmt"
+	"training/usecases"
+)
 
-func main() {
-
-	var n int
-	var t int
-	var id int
-	fmt.Scan(&n, &t)
-	floors := make([]int, n)
-	for i := 0; i < n; i++ {
-		fmt.Scan(&floors[i])
-	}
-	fmt.Scan(&id)
-	id--
-	res := 0
-	if floors[id] > t {
-		if floors[len(floors)]-floors[id] > floors[id]-floors[0] {
-			for i := id; i > 0; i-- {
-				res += floors[i] - floors[i-1]
-			}
-			res += floors[id+1] - floors[0]
-			for i := id + 1; i < len(floors)-1; i++ {
-				res += floors[i+1] - floors[i]
-			}
-		} else {
-			for i := id; i < len(floors)-1; i++ {
-				res += floors[i+1] - floors[i]
-			}
-			res += floors[len(floors)-1] - floors[id-1]
-			for i := id; i > 0; i-- {
-				res += floors[i] - floors[i-1]
+func kateAndDocs(docsAmount int, timeCollegueLeaves int, floors *[]int, idCollegue int) (floorsAmount int) {
+	floorArr := *floors
+	target := floorArr[idCollegue]
+	// если дойти с нулевого этажа до этажа коллеги мы не успеваем
+	if target-floorArr[0] > timeCollegueLeaves {
+		// если мы не успеваем дойти и с последнего этажа до этажа коллеги
+		if floorArr[docsAmount-1]-target > timeCollegueLeaves {
+			//самый неудачный случай
+			// мы двигаемся в сторону которая ближе к концу или к началу
+			// начинаем с таргет -> конец/начало -> таргет-1 или таргет+1 -> конец/начало
+			// если ближе к концу топать
+			if target-floorArr[0] > floorArr[docsAmount-1]-target {
+				for i := idCollegue; i < docsAmount-1; i++ {
+					floorsAmount += floorArr[i+1] - floorArr[i]
+				}
+				floorsAmount += floorArr[docsAmount-1] - floorArr[idCollegue-1]
+				for i := idCollegue - 1; i > 0; i-- {
+					floorsAmount += floorArr[i] - floorArr[i-1]
+				}
+			} else { // если ближе к началу
+				for i := idCollegue; i > 0; i-- {
+					floorsAmount += floorArr[i] - floorArr[i-1]
+				}
+				floorsAmount += floorArr[idCollegue+1] - floorArr[0]
+				for i := idCollegue + 1; i < docsAmount-1; i++ {
+					floorsAmount += floorArr[i+1] - floorArr[i]
+				}
 			}
 		}
-	} else {
-		res = floors[len(floors)-1] - floors[0]
+		// если все-таки успеваем к коллеге идя последовательно
+	} else if target-floorArr[0] <= timeCollegueLeaves || floorArr[docsAmount-1]-target <= timeCollegueLeaves {
+		for _, elem := range floorArr {
+			floorsAmount += (elem - floorsAmount)
+		}
+		floorsAmount -= floorArr[0]
 	}
-	fmt.Println(res)
+	return
 }
 
-// У Кати насыщенный день на работе. Ей надо передать n разных договоров коллегам.
-// Все встречи происходят на разных этажах, а между этажами можно перемещаться только по
-// лестничным пролетам — считается, что это улучшает физическую форму сотрудников.
-// Прохождение каждого пролета занимает ровно минуту.
-// Сейчас Катя на парковочном этаже, планирует свой маршрут.
-// Коллег можно посетить в любом порядке, но один из них покинет офис через t минут.
-// С парковочного этажа лестницы нет — только лифт, на котором можно подняться на любой этаж.
-//
-// В итоге план Кати следующий:
-// Подняться на лифте на произвольный этаж. Считается, что лифт поднимается на любой этаж за 0 минут.
-// Передать всем коллегам договоры, перемещаясь между этажами по лестнице. Считается,
-// 	что договоры на этаже передаются мгновенно.
-// В первые t минут передать договор тому коллеге, который планирует уйти.
-// Пройти минимальное количество лестничных пролетов.
-// Помогите Кате выполнить все пункты ее плана.
-
-// Формат входных данных
-// В первой строке вводятся целые положительные числа n и t  —
-// количество сотрудников и время, когда один из сотрудников покинет офис (в минутах).
-// В следующей строке n чисел — номера этажей, на которых находятся сотрудники.
-// Все числа различны и по абсолютной величине не превосходят 100.
-// Номера этажей даны в порядке возрастания.
-// В следующей строке записан номер сотрудника, который уйдет через t минут.
-
-// Формат выходных данных
-// Выведите одно число — минимально возможное число лестничных пролетов, которое понадобится пройти Кате.
-
-// Пример 1
-// Входные данные
-// 5 5
-// 1  4  9  16  25
-// 2
-// Выходные данные
-// 24
-// В первом примере времени достаточно, чтобы Катя поднялась по этажам по порядку.
-// Во втором примере Кате понадобится подняться к уходящему сотруднику,
-// а потом пройти всех остальных — например, в порядке
+func main() {
+	test := kateAndDocs
+	testCases := []usecases.TestCase{
+		{
+			Input:  usecases.KateInput{DocsAmount: 5, TimeCollegueLeaves: 5, Floors: []int{1, 4, 9, 16, 25}, IdCollegue: 2},
+			Output: 24,
+		}, {
+			Input:  usecases.KateInput{DocsAmount: 6, TimeCollegueLeaves: 4, Floors: []int{1, 2, 3, 6, 8, 25}, IdCollegue: 5},
+			Output: 31,
+		},
+	}
+	failedTests := 0
+	for _, tc := range testCases {
+		input := tc.Input.(usecases.KateInput)
+		output := test(input.DocsAmount, input.TimeCollegueLeaves, &input.Floors, input.IdCollegue)
+		if output != tc.Output {
+			failedTests++
+		}
+	}
+	fmt.Printf("Tests passed: %.2f percents\n", float64(len(testCases))/float64(failedTests)*100)
+}
