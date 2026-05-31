@@ -7,6 +7,7 @@ import (
 
 func kateAndDocs(docsAmount int, timeCollegueLeaves int, floors *[]int, idCollegue int) (floorsAmount int) {
 	floorArr := *floors
+	idCollegue--
 	target := floorArr[idCollegue]
 	// если дойти с нулевого этажа до этажа коллеги мы не успеваем
 	if target-floorArr[0] > timeCollegueLeaves {
@@ -36,10 +37,7 @@ func kateAndDocs(docsAmount int, timeCollegueLeaves int, floors *[]int, idColleg
 		}
 		// если все-таки успеваем к коллеге идя последовательно
 	} else if target-floorArr[0] <= timeCollegueLeaves || floorArr[docsAmount-1]-target <= timeCollegueLeaves {
-		for _, elem := range floorArr {
-			floorsAmount += (elem - floorsAmount)
-		}
-		floorsAmount -= floorArr[0]
+		floorsAmount = floorArr[docsAmount-1] - floorArr[0]
 	}
 	return
 }
@@ -56,12 +54,21 @@ func main() {
 		},
 	}
 	failedTests := 0
+	results := make([]string, len(testCases))
 	for _, tc := range testCases {
 		input := tc.Input.(usecases.KateInput)
 		output := test(input.DocsAmount, input.TimeCollegueLeaves, &input.Floors, input.IdCollegue)
 		if output != tc.Output {
 			failedTests++
+			results = append(results, fmt.Sprintf("Input: %v\nReceived: %v\nWanted: %v\n\n", input, output, tc.Output))
 		}
 	}
-	fmt.Printf("Tests passed: %.2f percents\n", float64(len(testCases))/float64(failedTests)*100)
+	if failedTests != 0 {
+		fmt.Printf("❌ Tests failed. Fail percent %.2f\n", (float64(len(testCases))/float64(failedTests))*100)
+		for _, elem := range results {
+			fmt.Print(elem)
+		}
+	} else {
+		fmt.Println("✅ All tests passed, congrats 🎉")
+	}
 }
