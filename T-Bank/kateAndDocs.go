@@ -9,14 +9,8 @@ func kateAndDocs(docsAmount int, timeCollegueLeaves int, floors *[]int, idColleg
 	floorArr := *floors
 	idCollegue--
 	target := floorArr[idCollegue]
-	// если дойти с нулевого этажа до этажа коллеги мы не успеваем
 	if target-floorArr[0] > timeCollegueLeaves {
-		// если мы не успеваем дойти и с последнего этажа до этажа коллеги
 		if floorArr[docsAmount-1]-target > timeCollegueLeaves {
-			//самый неудачный случай
-			// мы двигаемся в сторону которая ближе к концу или к началу
-			// начинаем с таргет -> конец/начало -> таргет-1 или таргет+1 -> конец/начало
-			// если ближе к концу топать
 			if target-floorArr[0] > floorArr[docsAmount-1]-target {
 				for i := idCollegue; i < docsAmount-1; i++ {
 					floorsAmount += floorArr[i+1] - floorArr[i]
@@ -25,7 +19,7 @@ func kateAndDocs(docsAmount int, timeCollegueLeaves int, floors *[]int, idColleg
 				for i := idCollegue - 1; i > 0; i-- {
 					floorsAmount += floorArr[i] - floorArr[i-1]
 				}
-			} else { // если ближе к началу
+			} else {
 				for i := idCollegue; i > 0; i-- {
 					floorsAmount += floorArr[i] - floorArr[i-1]
 				}
@@ -35,14 +29,13 @@ func kateAndDocs(docsAmount int, timeCollegueLeaves int, floors *[]int, idColleg
 				}
 			}
 		}
-		// если все-таки успеваем к коллеге идя последовательно
 	} else if target-floorArr[0] <= timeCollegueLeaves || floorArr[docsAmount-1]-target <= timeCollegueLeaves {
 		floorsAmount = floorArr[docsAmount-1] - floorArr[0]
 	}
 	return
 }
 
-func main() {
+func testKate() {
 	test := kateAndDocs
 	testCases := []usecases.TestCase{
 		{
