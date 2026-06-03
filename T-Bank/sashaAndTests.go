@@ -1,11 +1,17 @@
 package tbank
 
-// func sashaAndTests(l, r int) (testsAmount int) {
-// 	for i:=l; i<=r; i++ {
+import (
+	"fmt"
+)
 
-// 	}
-// }
-
-// func main() {
-
-// }
+func sashaAndTests() {
+	var l, r int
+	fmt.Scan(&l, &r)
+	var res int
+	for i := l; i < r+1; i++ {
+		if i/11 == 0 {
+			res++
+		}
+	}
+	fmt.Println(res)
+}
