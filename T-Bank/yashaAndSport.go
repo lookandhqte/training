@@ -1,10 +1,8 @@
-package main
+package tbank
 
-import (
-	"fmt"
-)
+import "fmt"
 
-func main() {
+func yashaAndSport() {
 	var n int
 	fmt.Scan(&n)
 	arr := make([]int, n)
