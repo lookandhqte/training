@@ -2,6 +2,7 @@ package tbank
 
 import "fmt"
 
+//dont work now
 func secretSanta() {
 	var n int
 	fmt.Scan(&n)
