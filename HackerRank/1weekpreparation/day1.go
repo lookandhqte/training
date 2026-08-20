@@ -1,6 +1,9 @@
 package weekpreparation
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func miniMaxSum(arr []int32) {
 	n := len(arr)
@@ -20,10 +23,17 @@ func miniMaxSum(arr []int32) {
 }
 
 func timeConversion(s string) string {
-	if s[8] == 'P' {
+	if s[8] == 'A' {
+		h, _ := strconv.Atoi(string(s[:2]))
+		if h == 12 {
+			return "00" + s[2:8]
+		}
 		return s[:8]
 	}
-	h := s[:2]
-	fmt.Println(h)
-	return h
+	h, _ := strconv.Atoi(string(s[:2]))
+	if h == 12 {
+		return s[:8]
+	}
+	h += 12
+	return strconv.Itoa(h) + s[2:8]
 }
